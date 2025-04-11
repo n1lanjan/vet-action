@@ -21,6 +21,8 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
         with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -34,14 +36,6 @@ jobs:
         id: install
         run: npm ci
 
-      - name: Check formatting
-        id: check-formatting
-        run: npm run format:check
-
-      - name: Check eslint
-        id: check-eslint
-        run: npm run lint
-
       - name: Lint Codebase
         id: super-linter
         uses: super-linter/super-linter/slim@v7.3.0
@@ -50,8 +44,10 @@ jobs:
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: (dist|__tests__)/**/*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_GIT_COMMITLINT: false
           VALIDATE_BASH: false
           VALIDATE_JSCPD: false
