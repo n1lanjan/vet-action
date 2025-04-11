@@ -32,6 +32,14 @@ jobs:
         id: install
         run: npm ci
 
+      - name: Check formatting
+        id: check-formatting
+        run: npm run format:check
+
+      - name: Check eslint
+        id: check-eslint
+        run: npm run lint
+
       - name: Lint Codebase
         id: super-linter
         uses: super-linter/super-linter/slim@v7.3.0
